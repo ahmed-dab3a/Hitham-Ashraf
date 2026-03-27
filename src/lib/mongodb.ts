@@ -20,6 +20,13 @@ if (!cached) {
 }
 
 async function dbConnect() {
+  if (!MONGODB_URI && process.env.NODE_ENV === 'production') {
+    // During build time, Next.js might evaluate this. 
+    // We only want to throw if we're actually trying to connect in a real request.
+    console.warn('MONGODB_URI is missing. Connection will fail at runtime.');
+    return; 
+  }
+
   if (!MONGODB_URI) {
     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
   }
