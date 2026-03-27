@@ -1,0 +1,12 @@
+[
+  { "id": "chicken-breast", "name": "Chicken Breast (Grilled)", "calories": 165, "protein": 31, "carbs": 0, "fats": 3.6, "unit": "100g" },
+  { "id": "white-rice", "name": "White Rice (Cooked)", "calories": 130, "protein": 2.7, "carbs": 28, "fats": 0.3, "unit": "100g" },
+  { "id": "eggs-whole", "name": "Large Egg", "calories": 70, "protein": 6, "carbs": 0.6, "fats": 5, "unit": "1 unit" },
+  { "id": "oats", "name": "Oatmeal (Raw)", "calories": 389, "protein": 16.9, "carbs": 66, "fats": 6.9, "unit": "100g" },
+  { "id": "whey-protein", "name": "Whey Protein Isolate", "calories": 120, "protein": 25, "carbs": 2, "fats": 1, "unit": "1 scoop" },
+  { "id": "peanut-butter", "name": "Peanut Butter", "calories": 588, "protein": 25, "carbs": 20, "fats": 50, "unit": "100g" },
+  { "id": "banana", "name": "Banana", "calories": 89, "protein": 1.1, "carbs": 23, "fats": 0.3, "unit": "1 medium" },
+  { "id": "greek-yogurt", "name": "Greek Yogurt (Non-fat)", "calories": 59, "protein": 10, "carbs": 3.6, "fats": 0.4, "unit": "100g" },
+  { "id": "almonds", "name": "Almonds", "calories": 579, "protein": 21, "carbs": 22, "fats": 50, "unit": "100g" },
+  { "id": "tuna-canned", "name": "Tuna (Canned in water)", "calories": 116, "protein": 26, "carbs": 0, "fats": 0.8, "unit": "100g" }
+]

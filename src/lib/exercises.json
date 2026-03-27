@@ -1,0 +1,92 @@
+[
+  {
+    "id": "bench-press",
+    "name": "Flat Bench Press",
+    "muscle": "Chest",
+    "category": "Push",
+    "description": "Lie on a flat bench and press the weight up until arms are extended, then lower to chest.",
+    "tag": "Gym",
+    "animation": "/animations/chest-press.gif"
+  },
+  {
+    "id": "push-ups",
+    "name": "Push Ups",
+    "muscle": "Chest",
+    "category": "Push",
+    "description": "Support body on hands and toes, lower chest to floor, and push back up.",
+    "tag": "Home",
+    "animation": "/animations/pushups.gif"
+  },
+  {
+    "id": "pull-ups",
+    "name": "Pull Ups",
+    "muscle": "Back",
+    "category": "Pull",
+    "description": "Hang from a bar and pull chest to bar, then lower with control.",
+    "tag": "Gym",
+    "animation": "/animations/pullups.gif"
+  },
+  {
+    "id": "lat-pulldowns",
+    "name": "Lat Pulldown",
+    "muscle": "Back",
+    "category": "Pull",
+    "description": "Sit and pull the bar down to upper chest, focusing on lats.",
+    "tag": "Gym",
+    "animation": "/animations/lat-pulldown.gif"
+  },
+  {
+    "id": "squats",
+    "name": "Barbell Squat",
+    "muscle": "Legs",
+    "category": "Legs",
+    "description": "Barbell on back, squat down until thighs are parallel to floor, then stand up.",
+    "tag": "Gym",
+    "animation": "/animations/squats.gif"
+  },
+  {
+    "id": "lunges",
+    "name": "Walking Lunges",
+    "muscle": "Legs",
+    "category": "Legs",
+    "description": "Step forward and lower hips until both knees are bent at 90 degrees.",
+    "tag": "Home/Gym",
+    "animation": "/animations/lunges.gif"
+  },
+  {
+    "id": "overhead-press",
+    "name": "Overhead Press",
+    "muscle": "Shoulders",
+    "category": "Push",
+    "description": "Press the weight from shoulders to overhead until arms are full extended.",
+    "tag": "Gym",
+    "animation": "/animations/overhead-press.gif"
+  },
+  {
+    "id": "lateral-raises",
+    "name": "Lateral Raises",
+    "muscle": "Shoulders",
+    "category": "Push",
+    "description": "Raise arms out to sides until parallel to floor, focusing on side delts.",
+    "tag": "Home/Gym",
+    "animation": "/animations/lateral-raises.gif"
+  },
+  {
+    "id": "bicep-curls",
+    "name": "Dumbbell Curls",
+    "muscle": "Arms",
+    "category": "Pull",
+    "description": "Curl weights toward shoulders while keeping elbows stationary.",
+    "tag": "Home/Gym",
+    "animation": "/animations/bicep-curls.gif"
+  },
+  {
+    "id": "tricep-dips",
+    "name": "Tricep Dips",
+    "muscle": "Arms",
+    "category": "Push",
+    "description": "Use a bench or bar to lower and raise body using tricep strength.",
+    "tag": "Home/Gym",
+    "animation": "/animations/tricep-dips.gif"
+  }
+]

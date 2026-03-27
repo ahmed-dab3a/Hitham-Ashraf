@@ -1,0 +1,140 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, User, Dumbbell, Utensils, LayoutDashboard, LogOut } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { Button } from '@/components/ui';
+
+export const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const { user, logout } = useAuthStore();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Exercises', href: '/exercises', icon: Dumbbell },
+    { name: 'Workouts', href: '/workouts', icon: Dumbbell },
+    { name: 'Nutrition', href: '/nutrition', icon: Utensils },
+  ];
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10 py-2' : 'bg-transparent py-4'
+    }`}>
+      <div className="container mx-auto px-6 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="relative w-10 h-10 overflow-hidden rounded-lg bg-primary">
+            <Image src="/assets/log.jpeg" alt="Hitham Ashraf" fill className="object-cover" />
+          </div>
+          <span className="text-xl font-bold font-display tracking-tight hidden sm:block">
+            HITHAM <span className="text-accent italic">ASHRAF</span>
+          </span>
+        </Link>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <Link 
+              key={link.name} 
+              href={link.href}
+              className={`text-sm font-medium transition-colors hover:text-accent flex items-center gap-2 ${
+                pathname === link.href ? 'text-accent' : 'text-gray-400'
+              }`}
+            >
+              <link.icon className="w-4 h-4" />
+              {link.name}
+            </Link>
+          ))}
+        </div>
+
+        <div className="hidden md:flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link href="/profile" className="flex items-center gap-2 hover:text-accent transition-colors">
+                <User className="w-4 h-4" />
+                <span className="text-sm font-semibold">{user.name}</span>
+              </Link>
+              <button onClick={logout} className="text-gray-400 hover:text-red-500 transition-colors">
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm">Login</Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="primary" size="sm">Get Started</Button>
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Mobile menu button */}
+        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-black border-t border-white/10 overflow-hidden"
+          >
+            <div className="flex flex-col p-6 gap-6">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.name} 
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`text-lg font-semibold flex items-center gap-4 ${
+                    pathname === link.href ? 'text-accent' : 'text-white'
+                  }`}
+                >
+                  <link.icon className="w-5 h-5" />
+                  {link.name}
+                </Link>
+              ))}
+              <hr className="border-white/10" />
+              {user ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-4">
+                     <User className="w-5 h-5 text-accent" />
+                     <span className="font-semibold">{user.name}</span>
+                  </div>
+                  <Button onClick={() => { logout(); setIsOpen(false); }} variant="outline">Logout</Button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <Link href="/login" onClick={() => setIsOpen(false)}>
+                    <Button variant="outline" className="w-full">Login</Button>
+                  </Link>
+                  <Link href="/register" onClick={() => setIsOpen(false)}>
+                    <Button variant="primary" className="w-full">Register</Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
