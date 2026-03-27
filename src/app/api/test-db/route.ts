@@ -9,11 +9,12 @@ export async function GET() {
       message: 'Connected to MongoDB successfully! 🔥',
       timestamp: new Date().toISOString()
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json({ 
       status: 'error', 
       message: 'Connection failed!',
-      error: error.message 
+      error: errorMessage 
     }, { status: 500 });
   }
 }

@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, X, Info, Dumbbell } from 'lucide-react';
-import { Card, Button } from '@/components/ui';
+import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, Dumbbell, Info } from 'lucide-react';
+import { Button } from '@/components/ui';
 import exercisesData from '@/lib/exercises.json';
 
 export default function StartWorkoutPage() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const planId = searchParams.get('id');
   
   // Mock plan fetching
   const plan = {
@@ -20,7 +18,7 @@ export default function StartWorkoutPage() {
   };
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [sessionData, setSessionData] = useState<any[]>(
+  const [sessionData, setSessionData] = useState<{ id: string; sets: { weight: string; reps: string; completed: boolean }[]; notes: string }[]>(
     plan.exercises.map(id => ({
       id,
       sets: [{ weight: '', reps: '', completed: false }],
@@ -32,15 +30,17 @@ export default function StartWorkoutPage() {
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
-    let interval: any = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (isActive) {
       interval = setInterval(() => {
         setTimer(timer => timer + 1);
       }, 1000);
-    } else {
+    } else if (interval) {
       clearInterval(interval);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isActive]);
 
   const formatTime = (seconds: number) => {
@@ -58,7 +58,7 @@ export default function StartWorkoutPage() {
     setSessionData(updated);
   };
 
-  const updateSet = (setIdx: number, field: string, value: string) => {
+  const updateSet = (setIdx: number, field: 'weight' | 'reps', value: string) => {
     const updated = [...sessionData];
     updated[currentStep].sets[setIdx][field] = value;
     setSessionData(updated);
@@ -73,6 +73,7 @@ export default function StartWorkoutPage() {
   const handleFinish = () => {
     // Logic to save to MongoDB would go here
     setIsActive(false);
+    console.log('Workout finished', sessionData);
     alert('Workout Finished! Stats saved.');
     router.push('/dashboard');
   };
@@ -130,7 +131,7 @@ export default function StartWorkoutPage() {
                </div>
                
                <div className="divide-y divide-white/5">
-                 {sessionData[currentStep].sets.map((set: any, idx: number) => (
+                 {sessionData[currentStep].sets.map((set, idx: number) => (
                    <div key={idx} className={`grid grid-cols-4 p-4 items-center transition-colors ${set.completed ? 'bg-accent/5' : ''}`}>
                       <div className="flex justify-center font-bold text-gray-400">{idx + 1}</div>
                       <div className="flex justify-center">

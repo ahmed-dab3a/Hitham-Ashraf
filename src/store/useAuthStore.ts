@@ -10,7 +10,7 @@ interface User {
     trialExpires: string;
     expiresAt?: string;
   };
-  profile: any;
+  profile: { name: string; email: string; subscription?: { status: string } };
 }
 
 interface AuthState {

@@ -2,12 +2,26 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Apple, Activity, PieChart, Trash2, ChevronRight, X, Info } from 'lucide-react';
+import { Plus, Search, Apple, Activity, Trash2, X } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
 import foodsData from '@/lib/foods.json';
 
+interface FoodItem {
+  name: string;
+  cal: number;
+  p: number;
+  c: number;
+  f: number;
+}
+
+interface Meal {
+  id: string;
+  name: string;
+  items: FoodItem[];
+}
+
 export default function NutritionPage() {
-  const [meals, setMeals] = useState<any[]>([
+  const [meals, setMeals] = useState<Meal[]>([
     { id: '1', name: 'Breakfast', items: [{ name: 'Oats', cal: 389, p: 17, c: 66, f: 7 }] },
     { id: '2', name: 'Lunch', items: [{ name: 'Chicken Breast', cal: 250, p: 45, c: 0, f: 5 }, { name: 'White Rice', cal: 200, p: 4, c: 45, f: 1 }] },
   ]);
@@ -18,7 +32,7 @@ export default function NutritionPage() {
 
   const totals = useMemo(() => {
     return meals.reduce((acc, meal) => {
-      meal.items.forEach((item: any) => {
+      meal.items.forEach((item) => {
         acc.cal += item.cal;
         acc.p += item.p;
         acc.c += item.c;
@@ -32,7 +46,7 @@ export default function NutritionPage() {
 
   const filteredFoods = foodsData.filter(f => f.name.toLowerCase().includes(search.toLowerCase()));
 
-  const addFoodToMeal = (food: any) => {
+  const addFoodToMeal = (food: { name: string; calories: number; protein: number; carbs: number; fats: number }) => {
     const updated = [...meals];
     updated[activeMealIndex].items.push({
       name: food.name,
@@ -119,12 +133,12 @@ export default function NutritionPage() {
                     <h3 className="text-xl font-bold">{mealName}</h3>
                   </div>
                   <span className="text-sm font-bold text-gray-500">
-                    {meal.items.reduce((sum: number, i: any) => sum + i.cal, 0)} kcal
+                    {meal.items.reduce((sum, item) => sum + item.cal, 0)} kcal
                   </span>
                 </div>
 
                 <div className="space-y-4 flex-grow mb-8">
-                  {meal.items.map((item: any, itemIdx: number) => (
+                  {meal.items.map((item, itemIdx: number) => (
                     <div key={itemIdx} className="flex items-center justify-between group">
                       <div>
                         <p className="font-bold text-gray-200">{item.name}</p>

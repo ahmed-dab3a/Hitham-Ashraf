@@ -2,16 +2,25 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, Info, ChevronRight, Dumbbell } from 'lucide-react';
+import { Search, Info, ChevronRight, Dumbbell, X } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
 import exercisesData from '@/lib/exercises.json';
+
+interface Exercise {
+  id: string;
+  name: string;
+  muscle: string;
+  tag: string;
+  category: string;
+  description: string;
+}
 
 const categories = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms'];
 
 export default function ExercisesPage() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedExercise, setSelectedExercise] = useState<any>(null);
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
 
   const filteredExercises = useMemo(() => {
     return exercisesData.filter((ex) => {
@@ -63,7 +72,7 @@ export default function ExercisesPage() {
         {/* Exercise Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
-            {filteredExercises.map((ex) => (
+            {filteredExercises.map((ex: Exercise) => (
               <motion.div
                 key={ex.id}
                 layout
@@ -187,9 +196,3 @@ export default function ExercisesPage() {
   );
 }
 
-// Helper components missing imports
-const X = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-  </svg>
-);

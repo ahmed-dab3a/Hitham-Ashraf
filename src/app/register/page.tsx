@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { Card, Button } from '@/components/ui';
+import { Button } from '@/components/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function RegisterPage() {
@@ -30,7 +31,7 @@ export default function RegisterPage() {
       } else {
         alert(data.error);
       }
-    } catch (error) {
+    } catch {
       alert('Something went wrong');
     } finally {
       setLoading(false);
@@ -47,10 +48,12 @@ export default function RegisterPage() {
           transition={{ duration: 1.5 }}
           className="absolute inset-0"
         >
-          <img 
+          <Image 
             src="/assets/cotch hitem 2.jpeg" 
             alt="Training" 
-            className="w-full h-full object-cover grayscale"
+            fill
+            className="object-cover grayscale"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black/20" />
         </motion.div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, ShieldCheck, CreditCard, Lock, Sparkles, Timer } from 'lucide-react';
+import { Check, ShieldCheck, CreditCard, Lock, Sparkles } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
 
 export default function SubscriptionPage() {
