@@ -16,6 +16,10 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Hitham Ashraf | Online Fitness Coach",
   description: "Transform your physique with personalized training and nutrition coaching by Hitham Ashraf.",
+  icons: {
+    icon: "/assets/log.jpeg",
+    apple: "/assets/log.jpeg",
+  }
 };
 
 export default function RootLayout({
