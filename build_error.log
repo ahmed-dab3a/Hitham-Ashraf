@@ -1,0 +1,52 @@
+﻿
+> htemp@0.1.0 build
+> next build
+
+ظû▓ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+ظ£ô Compiled successfully in 25.4s
+  Running TypeScript ...
+node.exe : Failed to type 
+check.
+At line:1 char:1
++ & "E:\Untouchable 
+Team\nodejs/node.exe" 
+"E:\Untouchable 
+Team\nodejs/n ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (Failed   
+  to type check.:String) [   
+ ], RemoteException
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+
+./src/app/api/auth/login/rout
+e.ts:26:31
+Type error: Object literal 
+may only specify known 
+properties, and 'id' does 
+not exist in type '{ userId: 
+string; }'.
+
+  [90m24 |[0m     }
+  [90m25 |[0m
+[31m[1m>[0m [90m26 |[0m 
+    [36mconst[0m token = 
+signToken({ id: user._id, 
+email: user.email });
+  [90m   |[0m              
+                 
+[31m[1m^[0m
+  [90m27 |[0m
+  [90m28 |[0m     
+[36mreturn[0m 
+[33mNextResponse[0m.json({
+  [90m29 |[0m       token,
+Next.js build worker exited 
+with code: 1 and signal: null
