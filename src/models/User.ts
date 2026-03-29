@@ -21,29 +21,49 @@ const UserSchema = new mongoose.Schema({
     targetCarbs: { type: Number, default: 250 },
     targetFats: { type: Number, default: 70 },
   },
+  weightHistory: [{
+    date: { type: Date, default: Date.now },
+    weight: Number
+  }],
   workouts: [{
     date: { type: Date, default: Date.now },
     name: String,
+    totalVolume: { type: Number, default: 0 },
     exercises: [{
       exerciseId: String,
       name: String,
       sets: [{
         reps: Number,
         weight: Number,
-        prevWeight: Number,
-        prevReps: Number
+        completed: { type: Boolean, default: true }
       }],
       notes: String
     }]
   }],
-  nutrition: [{
-    date: { type: Date, default: () => new Date().setHours(0,0,0,0) },
-    meals: [{
+  workoutPlans: [{
+    name: { type: String, required: true },
+    description: String,
+    category: { type: String, enum: ['Push', 'Pull', 'Legs', 'Full Body', 'Other'] },
+    exercises: [{
+      exerciseId: String,
       name: String,
-      calories: Number,
-      protein: Number,
-      carbs: Number,
-      fats: Number
+      targetSets: { type: Number, default: 3 },
+      targetReps: { type: String, default: '8-12' }
+    }]
+  }],
+  nutrition: [{
+    date: { type: String, required: true }, // Format: YYYY-MM-DD
+    meals: [{
+      mealType: { type: String, enum: ['Breakfast', 'Lunch', 'Dinner', 'Snacks'] },
+      items: [{
+        name: String,
+        amount: Number, // grams or portions
+        calories: Number,
+        protein: Number,
+        carbs: Number,
+        fats: Number,
+        foodId: String // ID from external API
+      }]
     }]
   }],
   streak: { type: Number, default: 0 },
