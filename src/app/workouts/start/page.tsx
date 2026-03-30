@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, Dumbbell, Info, X, Play, Pause, RotateCcw, Save, AlertCircle } from 'lucide-react';
@@ -20,7 +20,7 @@ interface WorkoutPlan {
   exercises: Exercise[];
 }
 
-export default function StartWorkoutPage() {
+function StartWorkoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const planId = searchParams.get('id');
@@ -376,3 +376,17 @@ export default function StartWorkoutPage() {
   );
 }
 
+export default function StartWorkoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <Dumbbell className="w-16 h-16 text-accent animate-spin mb-4 mx-auto" />
+          <p className="text-sm font-black uppercase tracking-widest text-gray-500">Loading Protocol...</p>
+        </div>
+      </div>
+    }>
+      <StartWorkoutContent />
+    </Suspense>
+  );
+}
