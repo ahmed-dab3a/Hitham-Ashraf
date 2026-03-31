@@ -6,7 +6,13 @@
     "category": "Push",
     "description": "Lie on a flat bench and press the weight up until arms are extended, then lower to chest.",
     "tag": "Gym",
-    "animation": "/animations/chest-press.gif"
+    "gifUrl": "/animations/chest-press.gif",
+    "equipment": "Barbell",
+    "instructions": [
+      "Lie flat on a bench and set your hands just outside shoulder-width.",
+      "Unrack the bar and slowly lower it to the middle of your chest.",
+      "Press the bar back up explosively to the starting position."
+    ]
   },
   {
     "id": "push-ups",
@@ -15,7 +21,13 @@
     "category": "Push",
     "description": "Support body on hands and toes, lower chest to floor, and push back up.",
     "tag": "Home",
-    "animation": "/animations/pushups.gif"
+    "gifUrl": "/animations/pushups.gif",
+    "equipment": "Body Weight",
+    "instructions": [
+      "Get into a high plank position with your hands slightly wider than shoulder-width.",
+      "Lower your body until your chest nearly touches the floor.",
+      "Push back up to the starting position, keeping your core engaged."
+    ]
   },
   {
     "id": "pull-ups",
@@ -24,7 +36,13 @@
     "category": "Pull",
     "description": "Hang from a bar and pull chest to bar, then lower with control.",
     "tag": "Gym",
-    "animation": "/animations/pullups.gif"
+    "gifUrl": "/animations/pullups.gif",
+    "equipment": "Pull-up Bar",
+    "instructions": [
+      "Grab the pull-up bar with an overhand grip slightly wider than shoulder-width.",
+      "Pull yourself up until your chin is over the bar.",
+      "Lower yourself back down with a controlled motion."
+    ]
   },
   {
     "id": "lat-pulldowns",
@@ -33,7 +51,13 @@
     "category": "Pull",
     "description": "Sit and pull the bar down to upper chest, focusing on lats.",
     "tag": "Gym",
-    "animation": "/animations/lat-pulldown.gif"
+    "gifUrl": "/animations/lat-pulldown.gif",
+    "equipment": "Cable Machine",
+    "instructions": [
+      "Sit at the lat pulldown machine and grab the wide bar.",
+      "Pull the bar down towards your upper chest while squeezing your shoulder blades together.",
+      "Slowly return the bar to the starting position."
+    ]
   },
   {
     "id": "squats",
@@ -42,7 +66,13 @@
     "category": "Legs",
     "description": "Barbell on back, squat down until thighs are parallel to floor, then stand up.",
     "tag": "Gym",
-    "animation": "/animations/squats.gif"
+    "gifUrl": "/animations/squats.gif",
+    "equipment": "Barbell",
+    "instructions": [
+      "Safely rest the barbell across the back of your shoulders.",
+      "Squat down by pushing your hips back and bending your knees.",
+      "Drive back up through your heels to the starting position."
+    ]
   },
   {
     "id": "lunges",
@@ -51,7 +81,13 @@
     "category": "Legs",
     "description": "Step forward and lower hips until both knees are bent at 90 degrees.",
     "tag": "Home/Gym",
-    "animation": "/animations/lunges.gif"
+    "gifUrl": "/animations/lunges.gif",
+    "equipment": "Dumbbells",
+    "instructions": [
+      "Stand tall with a dumbbell in each hand.",
+      "Step forward with one leg and lower your hips until both knees are bent at a 90-degree angle.",
+      "Push off your front foot to stand back up and alternate legs."
+    ]
   },
   {
     "id": "overhead-press",
@@ -60,7 +96,13 @@
     "category": "Push",
     "description": "Press the weight from shoulders to overhead until arms are full extended.",
     "tag": "Gym",
-    "animation": "/animations/overhead-press.gif"
+    "gifUrl": "/animations/overhead-press.gif",
+    "equipment": "Barbell",
+    "instructions": [
+      "Hold the barbell at shoulder height with an overhand grip.",
+      "Press the bar overhead until your arms are fully extended.",
+      "Lower the bar back to shoulder height under control."
+    ]
   },
   {
     "id": "lateral-raises",
@@ -69,7 +111,13 @@
     "category": "Push",
     "description": "Raise arms out to sides until parallel to floor, focusing on side delts.",
     "tag": "Home/Gym",
-    "animation": "/animations/lateral-raises.gif"
+    "gifUrl": "/animations/lateral-raises.gif",
+    "equipment": "Dumbbells",
+    "instructions": [
+      "Stand with a dumbbell in each hand by your sides.",
+      "Raise your arms straight out to the sides until they are parallel to the floor.",
+      "Slowly lower the dumbbells back to your sides."
+    ]
   },
   {
     "id": "bicep-curls",
@@ -78,7 +126,13 @@
     "category": "Pull",
     "description": "Curl weights toward shoulders while keeping elbows stationary.",
     "tag": "Home/Gym",
-    "animation": "/animations/bicep-curls.gif"
+    "gifUrl": "/animations/bicep-curls.gif",
+    "equipment": "Dumbbells",
+    "instructions": [
+      "Stand holding a dumbbell in each hand with palms facing forward.",
+      "Curl the weights towards your shoulders, keeping your elbows fixed by your sides.",
+      "Lower the weights back down with control."
+    ]
   },
   {
     "id": "tricep-dips",
@@ -87,6 +141,12 @@
     "category": "Push",
     "description": "Use a bench or bar to lower and raise body using tricep strength.",
     "tag": "Home/Gym",
-    "animation": "/animations/tricep-dips.gif"
+    "gifUrl": "/animations/tricep-dips.gif",
+    "equipment": "Dip Station",
+    "instructions": [
+      "Suspend your body on parallel dip bars with your arms locked out.",
+      "Lower your body by bending your elbows until they are at a 90-degree angle.",
+      "Push back up to the starting position."
+    ]
   }
 ]

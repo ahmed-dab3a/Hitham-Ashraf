@@ -16,9 +16,11 @@ interface User {
 interface AuthState {
   user: User | null;
   token: string | null;
+  language: 'en' | 'ar';
   setAuth: (user: User, token: string) => void;
   logout: () => void;
   updateUser: (user: Partial<User>) => void;
+  setLanguage: (lang: 'en' | 'ar') => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -26,12 +28,14 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       token: null,
+      language: 'en',
       setAuth: (user, token) => set({ user, token }),
       logout: () => set({ user: null, token: null }),
       updateUser: (updatedUser) => 
         set((state) => ({ 
           user: state.user ? { ...state.user, ...updatedUser } : null 
         })),
+      setLanguage: (lang) => set({ language: lang }),
     }),
     {
       name: 'auth-storage',

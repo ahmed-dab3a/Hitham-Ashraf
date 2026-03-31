@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, Dumbbell, Info } from 'lucide-react';
+import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, Dumbbell, Info, History } from 'lucide-react';
 import { Button } from '@/components/ui';
 import exercisesData from '@/lib/exercises.json';
 
@@ -26,6 +26,7 @@ export default function StartWorkoutPage() {
     }))
   );
 
+  const [workoutNote, setWorkoutNote] = useState('');
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(true);
 
@@ -51,6 +52,22 @@ export default function StartWorkoutPage() {
   };
 
   const currentExercise = exercisesData.find(e => e.id === plan.exercises[currentStep]);
+
+  const currentVolume = sessionData[currentStep].sets.reduce((acc, set) => {
+    if (set.completed && set.weight && set.reps) {
+      return acc + (parseFloat(set.weight) * parseInt(set.reps, 10));
+    }
+    return acc;
+  }, 0);
+
+  const totalVolume = sessionData.reduce((acc, exercise) => {
+    return acc + exercise.sets.reduce((setAcc, set) => {
+      if (set.completed && set.weight && set.reps) {
+        return setAcc + (parseFloat(set.weight) * parseInt(set.reps, 10));
+      }
+      return setAcc;
+    }, 0);
+  }, 0);
 
   const addSet = () => {
     const updated = [...sessionData];
@@ -116,9 +133,18 @@ export default function StartWorkoutPage() {
                   <p className="text-accent text-sm font-bold uppercase tracking-widest">{currentExercise?.muscle}</p>
                 </div>
               </div>
-              <Button variant="ghost" className="p-2">
-                 <Info className="w-6 h-6" />
-              </Button>
+              <div className="text-right">
+                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Exercise Volume</p>
+                <p className="text-xl font-black text-white">{currentVolume.toLocaleString()} <span className="text-sm font-normal text-gray-400">kg</span></p>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+               <History className="w-5 h-5 text-accent" />
+               <div>
+                 <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Previous Session Verification</p>
+                 <p className="text-sm font-bold">Best Set: 8 reps @ 20kg (160kg Volume)</p>
+               </div>
             </div>
 
             {/* Set Table */}
@@ -194,8 +220,31 @@ export default function StartWorkoutPage() {
           </motion.div>
         </AnimatePresence>
 
+        {/* Workout Summary & Notes */}
+        <div className="mt-12 bg-white/5 border border-white/10 rounded-3xl p-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+             <div>
+               <h3 className="text-xl font-bold uppercase tracking-widest text-accent mb-1">Total Workout Volume</h3>
+               <p className="text-4xl font-black">{totalVolume.toLocaleString()} <span className="text-lg text-gray-500 font-normal">kg moved</span></p>
+             </div>
+          </div>
+          
+          <div className="space-y-4">
+            <h3 className="text-white font-bold flex items-center gap-2 uppercase tracking-widest text-sm">
+              <MessageSquare className="w-4 h-4 text-accent" />
+              Overall Workout Notes
+            </h3>
+            <textarea 
+              placeholder="How was the overall session? (e.g. Great energy today, slept poorly last night)"
+              className="w-full bg-black/40 border border-white/10 rounded-2xl p-6 text-gray-300 focus:outline-none focus:border-accent min-h-[120px]"
+              value={workoutNote}
+              onChange={(e) => setWorkoutNote(e.target.value)}
+            />
+          </div>
+        </div>
+
         {/* Navigation Controls */}
-        <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center">
           <Button 
             variant="outline" 
             className="w-full sm:w-auto flex-grow h-16 text-lg" 

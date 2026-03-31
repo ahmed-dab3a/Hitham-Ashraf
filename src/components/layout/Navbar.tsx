@@ -13,7 +13,7 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const { user, logout } = useAuthStore();
+  const { user, logout, language, setLanguage } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,32 +23,41 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, [language]);
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'ar' : 'en');
+  };
+
   const navLinks = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Exercises', href: '/exercises', icon: Dumbbell },
-    { name: 'Workouts', href: '/workouts', icon: Dumbbell },
-    { name: 'Nutrition', href: '/nutrition', icon: Utensils },
+    { name: language === 'ar' ? 'لوحة القيادة' : 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: language === 'ar' ? 'التمارين' : 'Exercises', href: '/exercises', icon: Dumbbell },
+    { name: language === 'ar' ? 'الخطط الرياضية' : 'Workouts', href: '/workouts', icon: Dumbbell },
+    { name: language === 'ar' ? 'التغذية' : 'Nutrition', href: '/nutrition', icon: Utensils },
   ];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10 py-2' : 'bg-transparent py-4'
     }`}>
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+      <div className="container mx-auto px-6 flex items-center justify-between gap-4">
+        <Link href="/" className="flex items-center gap-2 shrink-0">
           <div className="relative w-10 h-10 overflow-hidden rounded-lg bg-primary">
-            <Image src="/assets/log.jpeg" alt="Hitham Ashraf" fill className="object-cover" />
+            <Image src="/assets/log.jpeg" alt="Log" fill className="object-cover" />
           </div>
           <span className="text-xl font-bold font-display tracking-tight hidden sm:block">
-            HITHAM <span className="text-accent italic">ASHRAF</span>
+            LYFTA <span className="text-accent italic">VIP</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 flex-grow justify-center">
           {navLinks.map((link) => (
             <Link 
-              key={link.name} 
+              key={link.href} 
               href={link.href}
               className={`text-sm font-medium transition-colors hover:text-accent flex items-center gap-2 ${
                 pathname === link.href ? 'text-accent' : 'text-gray-400'
@@ -60,7 +69,13 @@ export const Navbar = () => {
           ))}
         </div>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4 shrink-0">
+          <button 
+            onClick={toggleLanguage}
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors font-bold text-sm"
+          >
+            {language === 'en' ? 'AR' : 'EN'}
+          </button>
           {user ? (
             <div className="flex items-center gap-4">
               <Link href="/profile" className="flex items-center gap-2 hover:text-accent transition-colors">
@@ -74,10 +89,10 @@ export const Navbar = () => {
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost" size="sm">Login</Button>
+                <Button variant="ghost" size="sm">{language === 'ar' ? 'دخول' : 'Login'}</Button>
               </Link>
               <Link href="/register">
-                <Button variant="primary" size="sm">Get Started</Button>
+                <Button variant="primary" size="sm">{language === 'ar' ? 'ابدأ الان' : 'Get Started'}</Button>
               </Link>
             </>
           )}

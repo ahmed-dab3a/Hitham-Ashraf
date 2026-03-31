@@ -46,16 +46,31 @@ export default function NutritionPage() {
 
   const filteredFoods = foodsData.filter(f => f.name.toLowerCase().includes(search.toLowerCase()));
 
-  const addFoodToMeal = (food: { name: string; calories: number; protein: number; carbs: number; fats: number }) => {
+  const [selectedFoodToAdd, setSelectedFoodToAdd] = useState<any | null>(null);
+  const [inputAmount, setInputAmount] = useState<string>('100');
+
+  const addFoodToMeal = (food: any) => {
+    setSelectedFoodToAdd(food);
+    setInputAmount(food.unit.includes('100g') ? '100' : '1');
+  };
+
+  const confirmAddFoodToMeal = () => {
+    if (!selectedFoodToAdd) return;
+    
+    const amount = parseFloat(inputAmount) || 0;
+    const isWeightBased = selectedFoodToAdd.unit.includes('100g');
+    const multiplier = isWeightBased ? (amount / 100) : amount;
+
     const updated = [...meals];
     updated[activeMealIndex].items.push({
-      name: food.name,
-      cal: food.calories,
-      p: food.protein,
-      c: food.carbs,
-      f: food.fats
+      name: `${selectedFoodToAdd.name} (${amount}${isWeightBased ? 'g' : 'x'})`,
+      cal: Math.round(selectedFoodToAdd.calories * multiplier),
+      p: Math.round(selectedFoodToAdd.protein * multiplier * 10) / 10,
+      c: Math.round(selectedFoodToAdd.carbs * multiplier * 10) / 10,
+      f: Math.round(selectedFoodToAdd.fats * multiplier * 10) / 10
     });
     setMeals(updated);
+    setSelectedFoodToAdd(null);
     setIsAddingFood(false);
     setSearch('');
   };
@@ -210,26 +225,53 @@ export default function NutritionPage() {
                   />
                 </div>
 
-                <div className="max-h-[400px] overflow-y-auto space-y-2 no-scrollbar">
-                  {filteredFoods.map((food) => (
-                    <button
-                      key={food.id}
-                      onClick={() => addFoodToMeal(food)}
-                      className="w-full flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-accent/40 hover:bg-accent/5 transition-all group text-left"
-                    >
-                      <div>
-                        <p className="font-bold group-hover:text-accent transition-colors">{food.name}</p>
-                        <p className="text-xs text-gray-500 uppercase font-bold tracking-widest">{food.unit} • {food.calories} kcal</p>
-                      </div>
-                      <Plus className="w-5 h-5 text-gray-600 group-hover:text-accent transition-all" />
-                    </button>
-                  ))}
-                  {filteredFoods.length === 0 && (
-                    <div className="text-center py-12">
-                       <p className="text-gray-500 italic">No foods found. Try a different search term.</p>
+                {selectedFoodToAdd ? (
+                  <div className="py-8 text-center animate-in fade-in zoom-in duration-300">
+                    <h3 className="text-xl font-bold mb-2">{selectedFoodToAdd.name}</h3>
+                    <p className="text-gray-400 mb-8">
+                      Base: {selectedFoodToAdd.calories} kcal per {selectedFoodToAdd.unit}
+                    </p>
+                    
+                    <div className="flex flex-col items-center gap-4 mb-8">
+                      <label className="text-sm font-bold uppercase tracking-widest text-accent">
+                        {selectedFoodToAdd.unit.includes('100g') ? 'Amount (grams)' : 'Quantity (units)'}
+                      </label>
+                      <input 
+                        type="number"
+                        value={inputAmount}
+                        onChange={(e) => setInputAmount(e.target.value)}
+                        className="w-32 bg-black/40 border border-white/10 rounded-2xl py-4 text-center text-2xl font-black text-white focus:outline-none focus:border-accent"
+                        autoFocus
+                      />
                     </div>
-                  )}
-                </div>
+                    
+                    <div className="flex gap-4 justify-center">
+                      <Button variant="ghost" onClick={() => setSelectedFoodToAdd(null)}>Back</Button>
+                      <Button onClick={confirmAddFoodToMeal}>Add to Meal</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="max-h-[400px] overflow-y-auto space-y-2 no-scrollbar">
+                    {filteredFoods.map((food) => (
+                      <button
+                        key={food.id}
+                        onClick={() => addFoodToMeal(food)}
+                        className="w-full flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-accent/40 hover:bg-accent/5 transition-all group text-left"
+                      >
+                        <div>
+                          <p className="font-bold group-hover:text-accent transition-colors">{food.name}</p>
+                          <p className="text-xs text-gray-500 uppercase font-bold tracking-widest">{food.unit} • {food.calories} kcal</p>
+                        </div>
+                        <Plus className="w-5 h-5 text-gray-600 group-hover:text-accent transition-all" />
+                      </button>
+                    ))}
+                    {filteredFoods.length === 0 && (
+                      <div className="text-center py-12">
+                         <p className="text-gray-500 italic">No foods found. Try a different search term.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

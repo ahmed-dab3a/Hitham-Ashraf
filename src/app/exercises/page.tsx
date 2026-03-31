@@ -13,9 +13,12 @@ interface Exercise {
   tag: string;
   category: string;
   description: string;
+  gifUrl: string;
+  equipment: string;
+  instructions: string[];
 }
 
-const categories = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms'];
+const categories = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Push', 'Pull'];
 
 export default function ExercisesPage() {
   const [search, setSearch] = useState('');
@@ -26,7 +29,10 @@ export default function ExercisesPage() {
     return exercisesData.filter((ex) => {
       const matchesSearch = ex.name.toLowerCase().includes(search.toLowerCase()) || 
                            ex.description.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || ex.muscle === selectedCategory;
+      const matchesCategory = selectedCategory === 'All' || 
+                              ex.muscle === selectedCategory || 
+                              ex.category === selectedCategory || 
+                              ex.equipment === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [search, selectedCategory]);
@@ -137,17 +143,20 @@ export default function ExercisesPage() {
             >
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="relative aspect-square lg:aspect-auto bg-primary/20 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10">
-                  <div className="flex flex-col items-center gap-4 text-accent/50 p-12 text-center">
-                    <Dumbbell className="w-24 h-24 animate-pulse" />
-                    <p className="text-sm font-bold uppercase tracking-widest">Animation Loading...</p>
-                    <p className="text-xs text-gray-500 max-w-[200px]">Simulated exercise animation for {selectedExercise.name}</p>
+                  <div className="flex flex-col items-center gap-4 text-accent/50 p-12 text-center relative w-full h-full min-h-[300px]">
+                    <img 
+                      src={selectedExercise.gifUrl} 
+                      alt={selectedExercise.name}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-screen"
+                    />
                   </div>
-                  <div className="absolute top-6 left-6">
-                     <span className="px-4 py-2 bg-accent text-black font-bold rounded-full text-xs uppercase">{selectedExercise.tag}</span>
+                  <div className="absolute top-6 left-6 z-10">
+                     <span className="px-4 py-2 bg-accent text-black font-bold rounded-full text-xs uppercase">{selectedExercise.equipment}</span>
                   </div>
                 </div>
                 
-                <div className="p-8 lg:p-12">
+                <div className="p-8 lg:p-12 overflow-y-auto max-h-[80vh] no-scrollbar">
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h2 className="text-3xl font-display font-black mb-2">{selectedExercise.name}</h2>
@@ -171,17 +180,14 @@ export default function ExercisesPage() {
                      </div>
 
                      <div className="bg-white/5 rounded-3xl p-6 border border-white/10">
-                        <h4 className="text-white font-bold mb-4">Quick Tips</h4>
-                        <ul className="space-y-3">
-                          <li className="flex gap-3 text-sm text-gray-400">
-                            <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
-                            Focus on controlled movements and full range of motion.
-                          </li>
-                          <li className="flex gap-3 text-sm text-gray-400">
-                            <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
-                            Inhale during the eccentric phase, exhale during the concentric phase.
-                          </li>
-                        </ul>
+                        <h4 className="text-white font-bold mb-4">Instructions</h4>
+                        <ol className="space-y-3 list-decimal list-inside">
+                          {selectedExercise.instructions.map((step, idx) => (
+                            <li key={idx} className="text-sm text-gray-400 leading-relaxed">
+                              {step}
+                            </li>
+                          ))}
+                        </ol>
                      </div>
 
                      <Button className="w-full" onClick={() => setSelectedExercise(null)}>Close Library</Button>
