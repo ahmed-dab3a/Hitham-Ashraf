@@ -13,15 +13,6 @@ interface Exercise {
   equipment: string;
   difficulty: string;
   category: string;
-<<<<<<< HEAD
-  description: string;
-  gifUrl: string;
-  equipment: string;
-  instructions: string[];
-}
-
-const categories = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Push', 'Pull'];
-=======
   instructions: string[];
   gifUrl: string;
 }
@@ -29,7 +20,6 @@ const categories = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Push',
 const muscles = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Abs'];
 const categories = ['All', 'Push', 'Pull', 'Legs'];
 const equipments = ['All', 'Barbell', 'Dumbbells', 'Cable', 'Machine', 'Bodyweight'];
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -40,19 +30,6 @@ export default function ExercisesPage() {
   const [selectedEquipment, setSelectedEquipment] = useState('All');
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
 
-<<<<<<< HEAD
-  const filteredExercises = useMemo(() => {
-    return exercisesData.filter((ex) => {
-      const matchesSearch = ex.name.toLowerCase().includes(search.toLowerCase()) || 
-                           ex.description.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || 
-                              ex.muscle === selectedCategory || 
-                              ex.category === selectedCategory || 
-                              ex.equipment === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [search, selectedCategory]);
-=======
   useEffect(() => {
     const fetchExercises = async () => {
       setLoading(true);
@@ -76,7 +53,6 @@ export default function ExercisesPage() {
     const timer = setTimeout(fetchExercises, 300);
     return () => clearTimeout(timer);
   }, [search, selectedMuscle, selectedCategory, selectedEquipment]);
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
 
   return (
     <div className="pt-32 pb-20 min-h-screen bg-black">
@@ -246,19 +222,6 @@ export default function ExercisesPage() {
               className="relative w-full max-w-5xl bg-card-bg border border-white/10 rounded-[48px] overflow-hidden shadow-2xl my-auto"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2">
-<<<<<<< HEAD
-                <div className="relative aspect-square lg:aspect-auto bg-primary/20 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10">
-                  <div className="flex flex-col items-center gap-4 text-accent/50 p-12 text-center relative w-full h-full min-h-[300px]">
-                    <img 
-                      src={selectedExercise.gifUrl} 
-                      alt={selectedExercise.name}
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-screen"
-                    />
-                  </div>
-                  <div className="absolute top-6 left-6 z-10">
-                     <span className="px-4 py-2 bg-accent text-black font-bold rounded-full text-xs uppercase">{selectedExercise.equipment}</span>
-=======
                 <div className="relative aspect-square lg:aspect-auto bg-black flex items-center justify-center overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
                   <img 
                     src={selectedExercise.gifUrl} 
@@ -272,20 +235,12 @@ export default function ExercisesPage() {
                   <div className="absolute bottom-10 left-10 flex gap-4">
                      <div className="px-6 py-2 bg-accent text-black font-black rounded-full text-[10px] uppercase tracking-widest shadow-xl shadow-accent/20">{selectedExercise.category}</div>
                      <div className="px-6 py-2 bg-white/10 backdrop-blur-md text-white font-black rounded-full text-[10px] uppercase tracking-widest border border-white/10">{selectedExercise.difficulty}</div>
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
                   </div>
                   <button onClick={() => setSelectedExercise(null)} className="absolute top-8 right-8 p-4 bg-black/40 backdrop-blur-md rounded-3xl hover:bg-black transition-all group lg:hidden">
                     <X className="w-6 h-6 group-hover:rotate-90 transition-transform" />
                   </button>
                 </div>
                 
-<<<<<<< HEAD
-                <div className="p-8 lg:p-12 overflow-y-auto max-h-[80vh] no-scrollbar">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <h2 className="text-3xl font-display font-black mb-2">{selectedExercise.name}</h2>
-                      <p className="text-accent font-bold uppercase tracking-widest text-sm">{selectedExercise.muscle} • {selectedExercise.category}</p>
-=======
                 <div className="p-10 lg:p-16 max-h-[90vh] overflow-y-auto no-scrollbar">
                   <div className="flex justify-between items-start mb-10">
                     <div className="flex-grow pr-4">
@@ -298,7 +253,6 @@ export default function ExercisesPage() {
                            Secondary: {selectedExercise.secondaryMuscles.join(', ')}
                          </p>
                       </div>
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
                     </div>
                     <button onClick={() => setSelectedExercise(null)} className="hidden lg:block p-4 bg-white/5 rounded-3xl hover:bg-white/10 transition-all group shrink-0">
                       <X className="w-6 h-6 group-hover:rotate-90 transition-transform" />
@@ -343,23 +297,11 @@ export default function ExercisesPage() {
                        </div>
                      </div>
 
-<<<<<<< HEAD
-                     <div className="bg-white/5 rounded-3xl p-6 border border-white/10">
-                        <h4 className="text-white font-bold mb-4">Instructions</h4>
-                        <ol className="space-y-3 list-decimal list-inside">
-                          {selectedExercise.instructions.map((step, idx) => (
-                            <li key={idx} className="text-sm text-gray-400 leading-relaxed">
-                              {step}
-                            </li>
-                          ))}
-                        </ol>
-=======
                      <div className="bg-gradient-to-br from-accent/5 to-transparent rounded-[32px] p-8 border border-accent/10">
                         <h4 className="text-accent font-black uppercase tracking-widest text-xs mb-4">Elite Coaching Tip</h4>
                         <p className="text-gray-300 text-sm italic leading-relaxed">
                           "Ensure a full range of motion. The maximum hypertrophic stimulus occurs during the deep eccentric stretch of the movement. Focus on a 3-second eccentric phase."
                         </p>
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
                      </div>
 
                      <Button className="w-full py-8 rounded-3xl uppercase font-black tracking-[0.2em] shadow-xl shadow-accent/20" onClick={() => setSelectedExercise(null)}>Dismiss Library</Button>

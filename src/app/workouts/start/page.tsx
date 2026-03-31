@@ -3,15 +3,9 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-<<<<<<< HEAD
-import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, Dumbbell, Info, History } from 'lucide-react';
-import { Button } from '@/components/ui';
-import exercisesData from '@/lib/exercises.json';
-=======
 import { Check, ChevronRight, ChevronLeft, Timer, Flame, MessageSquare, Trophy, Dumbbell, Info, X, Play, Pause, RotateCcw, Save, AlertCircle } from 'lucide-react';
 import { Button, Card } from '@/components/ui';
 import { useAuthStore } from '@/store/useAuthStore';
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
 
 interface Exercise {
   exerciseId: string;
@@ -34,19 +28,6 @@ function StartWorkoutContent() {
 
   const [plan, setPlan] = useState<WorkoutPlan | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
-<<<<<<< HEAD
-  const [sessionData, setSessionData] = useState<{ id: string; sets: { weight: string; reps: string; completed: boolean }[]; notes: string }[]>(
-    plan.exercises.map(id => ({
-      id,
-      sets: [{ weight: '', reps: '', completed: false }],
-      notes: ''
-    }))
-  );
-
-  const [workoutNote, setWorkoutNote] = useState('');
-  const [timer, setTimer] = useState(0);
-  const [isActive, setIsActive] = useState(true);
-=======
   const [sessionData, setSessionData] = useState<{ name: string; sets: { weight: number; reps: number; completed: boolean }[]; notes: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [workoutTimer, setWorkoutTimer] = useState(0);
@@ -55,7 +36,6 @@ function StartWorkoutContent() {
   // Rest Timer State
   const [restTimer, setRestTimer] = useState(0);
   const [showRestTimer, setShowRestTimer] = useState(false);
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
 
   useEffect(() => {
     if (!planId) {
@@ -121,27 +101,6 @@ function StartWorkoutContent() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-<<<<<<< HEAD
-  const currentExercise = exercisesData.find(e => e.id === plan.exercises[currentStep]);
-
-  const currentVolume = sessionData[currentStep].sets.reduce((acc, set) => {
-    if (set.completed && set.weight && set.reps) {
-      return acc + (parseFloat(set.weight) * parseInt(set.reps, 10));
-    }
-    return acc;
-  }, 0);
-
-  const totalVolume = sessionData.reduce((acc, exercise) => {
-    return acc + exercise.sets.reduce((setAcc, set) => {
-      if (set.completed && set.weight && set.reps) {
-        return setAcc + (parseFloat(set.weight) * parseInt(set.reps, 10));
-      }
-      return setAcc;
-    }, 0);
-  }, 0);
-
-=======
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
   const addSet = () => {
     const updated = [...sessionData];
     updated[currentStep].sets.push({ weight: 0, reps: 0, completed: false });
@@ -276,24 +235,9 @@ function StartWorkoutContent() {
                    <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{plan.exercises[currentStep].targetSets} Target Sets</span>
                 </div>
               </div>
-<<<<<<< HEAD
-              <div className="text-right">
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Exercise Volume</p>
-                <p className="text-xl font-black text-white">{currentVolume.toLocaleString()} <span className="text-sm font-normal text-gray-400">kg</span></p>
-              </div>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
-               <History className="w-5 h-5 text-accent" />
-               <div>
-                 <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Previous Session Verification</p>
-                 <p className="text-sm font-bold">Best Set: 8 reps @ 20kg (160kg Volume)</p>
-               </div>
-=======
               <Button variant="ghost" className="p-4 bg-white/5 rounded-3xl hover:bg-white/10 shrink-0">
                  <Info className="w-6 h-6 text-gray-400" />
               </Button>
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
             </div>
 
             {/* Set Precision Logging */}
@@ -374,51 +318,6 @@ function StartWorkoutContent() {
           </motion.div>
         </AnimatePresence>
 
-<<<<<<< HEAD
-        {/* Workout Summary & Notes */}
-        <div className="mt-12 bg-white/5 border border-white/10 rounded-3xl p-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-             <div>
-               <h3 className="text-xl font-bold uppercase tracking-widest text-accent mb-1">Total Workout Volume</h3>
-               <p className="text-4xl font-black">{totalVolume.toLocaleString()} <span className="text-lg text-gray-500 font-normal">kg moved</span></p>
-             </div>
-          </div>
-          
-          <div className="space-y-4">
-            <h3 className="text-white font-bold flex items-center gap-2 uppercase tracking-widest text-sm">
-              <MessageSquare className="w-4 h-4 text-accent" />
-              Overall Workout Notes
-            </h3>
-            <textarea 
-              placeholder="How was the overall session? (e.g. Great energy today, slept poorly last night)"
-              className="w-full bg-black/40 border border-white/10 rounded-2xl p-6 text-gray-300 focus:outline-none focus:border-accent min-h-[120px]"
-              value={workoutNote}
-              onChange={(e) => setWorkoutNote(e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Navigation Controls */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center">
-          <Button 
-            variant="outline" 
-            className="w-full sm:w-auto flex-grow h-16 text-lg" 
-            disabled={currentStep === 0}
-            onClick={() => setCurrentStep(prev => prev - 1)}
-          >
-            <ChevronLeft className="mr-2 w-6 h-6" /> Previous Exercise
-          </Button>
-          
-          {currentStep === plan.exercises.length - 1 ? (
-            <Button className="w-full sm:w-auto flex-grow h-16 text-lg bg-green-500 hover:bg-green-600 text-black shadow-lg shadow-green-500/20" onClick={handleFinish}>
-               Finish Workout <Trophy className="ml-2 w-6 h-6" />
-            </Button>
-          ) : (
-            <Button className="w-full sm:w-auto flex-grow h-16 text-lg" onClick={() => setCurrentStep(prev => prev + 1)}>
-               Next Exercise <ChevronRight className="ml-2 w-6 h-6" />
-            </Button>
-          )}
-=======
         {/* Global Controls */}
         <div className="fixed bottom-0 left-0 right-0 p-6 md:p-10 bg-gradient-to-t from-black via-black/95 to-transparent z-40">
            <div className="container mx-auto max-w-3xl flex gap-6">
@@ -445,7 +344,6 @@ function StartWorkoutContent() {
                 </Button>
               )}
            </div>
->>>>>>> 22826b47f9f789f40cbef77107f14f7859bb23fe
         </div>
       </div>
 
