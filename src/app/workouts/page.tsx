@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, GripVertical, Save, Dumbbell, History, Play, Search, CheckCircle2, ChevronRight, Activity, Calendar, Zap } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface Exercise {
   id: string;
@@ -37,6 +38,7 @@ interface WorkoutSession {
 }
 
 export default function WorkoutsPage() {
+  const token = useAuthStore(state => state.token);
   const [activeTab, setActiveTab] = useState<'plans' | 'history'>('plans');
   const [plans, setPlans] = useState<WorkoutPlan[]>([]);
   const [history, setHistory] = useState<WorkoutSession[]>([]);
@@ -58,9 +60,12 @@ export default function WorkoutsPage() {
   }, [activeTab]);
 
   const fetchData = async () => {
+    if (!token) { setLoading(false); return; }
     setLoading(true);
     try {
-      const res = await fetch(`/api/workouts?type=${activeTab}`);
+      const res = await fetch(`/api/workouts?type=${activeTab}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       const data = await res.json();
       if (activeTab === 'plans') setPlans(data);
       else setHistory(data);
@@ -89,7 +94,7 @@ export default function WorkoutsPage() {
     try {
       const res = await fetch('/api/workouts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ action: 'savePlan', data: newPlan })
       });
       if (res.ok) {
@@ -120,7 +125,7 @@ export default function WorkoutsPage() {
 
   const deletePlan = async (id: string) => {
     try {
-      const res = await fetch(`/api/workouts?id=${id}&type=plan`, { method: 'DELETE' });
+      const res = await fetch(`/api/workouts?id=${id}&type=plan`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
       if (res.ok) fetchData();
     } catch (err) {
       console.error('Failed to delete plan', err);

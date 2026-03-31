@@ -4,6 +4,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Apple, Activity, Trash2, X, ChevronLeft, ChevronRight, Scale } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
+import { useAuthStore } from '@/store/useAuthStore';
+import type { FoodData } from '@/lib/food-data';
 
 interface FoodItem {
   id?: string;
@@ -28,6 +30,7 @@ interface DayLog {
 }
 
 export default function NutritionPage() {
+  const token = useAuthStore(state => state.token);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [dayLog, setDayLog] = useState<DayLog>({ date, meals: [] });
   const [loading, setLoading] = useState(true);
@@ -35,9 +38,9 @@ export default function NutritionPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [activeMealType, setActiveMealType] = useState('Breakfast');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<FoodData[]>([]);
   
-  const [selectedFood, setSelectedFood] = useState<any | null>(null);
+  const [selectedFood, setSelectedFood] = useState<FoodData | null>(null);
   const [portionGrams, setPortionGrams] = useState(100);
 
   // Fetch Day Log
@@ -45,7 +48,9 @@ export default function NutritionPage() {
     const fetchLog = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/nutrition?date=${date}`);
+        const res = await fetch(`/api/nutrition?date=${date}`, {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
         const data = await res.json();
         setDayLog(data);
       } catch (err) {
@@ -103,7 +108,7 @@ export default function NutritionPage() {
     try {
       const res = await fetch('/api/nutrition', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
         body: JSON.stringify({
           date,
           mealType: activeMealType,
@@ -113,7 +118,9 @@ export default function NutritionPage() {
       
       if (res.ok) {
         // Refresh log
-        const updatedLogRes = await fetch(`/api/nutrition?date=${date}`);
+        const updatedLogRes = await fetch(`/api/nutrition?date=${date}`, {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
         const updatedLog = await updatedLogRes.json();
         setDayLog(updatedLog);
         

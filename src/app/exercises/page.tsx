@@ -19,6 +19,7 @@ interface Exercise {
 
 const muscles = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Abs'];
 const categories = ['All', 'Push', 'Pull', 'Legs'];
+const equipments = ['All', 'Barbell', 'Dumbbells', 'Cable', 'Machine', 'Bodyweight'];
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -26,6 +27,7 @@ export default function ExercisesPage() {
   const [search, setSearch] = useState('');
   const [selectedMuscle, setSelectedMuscle] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedEquipment, setSelectedEquipment] = useState('All');
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function ExercisesPage() {
         const params = new URLSearchParams();
         if (selectedMuscle !== 'All') params.append('muscle', selectedMuscle);
         if (selectedCategory !== 'All') params.append('category', selectedCategory);
+        if (selectedEquipment !== 'All') params.append('equipment', selectedEquipment);
         if (search) params.append('search', search);
         
         const res = await fetch(`/api/exercises?${params.toString()}`);
@@ -49,7 +52,7 @@ export default function ExercisesPage() {
 
     const timer = setTimeout(fetchExercises, 300);
     return () => clearTimeout(timer);
-  }, [search, selectedMuscle, selectedCategory]);
+  }, [search, selectedMuscle, selectedCategory, selectedEquipment]);
 
   return (
     <div className="pt-32 pb-20 min-h-screen bg-black">
@@ -105,6 +108,25 @@ export default function ExercisesPage() {
                   }`}
                 >
                   {m}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 border-t border-white/5 pt-6">
+             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mr-2">Equipment:</span>
+             <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+              {equipments.map((eq) => (
+                <button
+                  key={eq}
+                  onClick={() => setSelectedEquipment(eq)}
+                  className={`px-5 py-2 rounded-xl font-bold text-xs whitespace-nowrap transition-all duration-300 ${
+                    selectedEquipment === eq 
+                      ? 'bg-accent text-black shadow-lg shadow-accent/10' 
+                      : 'bg-white/5 text-gray-400 border border-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  {eq}
                 </button>
               ))}
             </div>
