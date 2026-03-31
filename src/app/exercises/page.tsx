@@ -149,8 +149,16 @@ export default function ExercisesPage() {
                   className="h-full flex flex-col justify-between cursor-pointer group hover:border-accent/40 bg-gradient-to-br from-card-bg to-black transition-all duration-500 rounded-[32px] overflow-hidden" 
                   onClick={() => setSelectedExercise(ex)}
                 >
-                  <div className="relative aspect-video overflow-hidden bg-black/50">
-                     <img src={ex.gifUrl} alt={ex.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                  <div className="relative aspect-video overflow-hidden bg-black/50 flex items-center justify-center">
+                     <img 
+                       src={ex.gifUrl} 
+                       alt={ex.name} 
+                       className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
+                       onError={(e) => {
+                         e.currentTarget.src = 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop';
+                         e.currentTarget.className = "w-full h-full object-cover opacity-30 grayscale group-hover:scale-110 transition-all duration-700";
+                       }}
+                     />
                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
                      <div className="absolute top-4 right-4 gap-2 flex">
                         <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] font-black uppercase tracking-widest rounded-full text-accent border border-accent/20">
@@ -215,7 +223,15 @@ export default function ExercisesPage() {
             >
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="relative aspect-square lg:aspect-auto bg-black flex items-center justify-center overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
-                  <img src={selectedExercise.gifUrl} alt={selectedExercise.name} className="w-full h-full object-cover" />
+                  <img 
+                    src={selectedExercise.gifUrl} 
+                    alt={selectedExercise.name} 
+                    className="w-full h-full object-cover" 
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop';
+                      e.currentTarget.className = "w-full h-full object-cover opacity-50 grayscale";
+                    }}
+                  />
                   <div className="absolute bottom-10 left-10 flex gap-4">
                      <div className="px-6 py-2 bg-accent text-black font-black rounded-full text-[10px] uppercase tracking-widest shadow-xl shadow-accent/20">{selectedExercise.category}</div>
                      <div className="px-6 py-2 bg-white/10 backdrop-blur-md text-white font-black rounded-full text-[10px] uppercase tracking-widest border border-white/10">{selectedExercise.difficulty}</div>

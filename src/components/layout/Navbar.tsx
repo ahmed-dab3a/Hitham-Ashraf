@@ -5,15 +5,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, Dumbbell, Utensils, LayoutDashboard, LogOut } from 'lucide-react';
+import { Menu, X, User, Dumbbell, Utensils, LayoutDashboard, LogOut, Globe } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui';
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [lang, setLang] = useState<'EN' | 'AR'>('EN');
   const pathname = usePathname();
   const { user, logout } = useAuthStore();
+
+  const toggleLanguage = () => {
+    const newLang = lang === 'EN' ? 'AR' : 'EN';
+    setLang(newLang);
+    document.documentElement.dir = newLang === 'AR' ? 'rtl' : 'ltr';
+    document.documentElement.lang = newLang === 'AR' ? 'ar' : 'en';
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,6 +69,14 @@ export const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
+          <button 
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 hover:border-accent hover:text-accent transition-colors text-xs font-black tracking-widest bg-white/5"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            {lang}
+          </button>
+          
           {user ? (
             <div className="flex items-center gap-4">
               <Link href="/profile" className="flex items-center gap-2 hover:text-accent transition-colors">
@@ -112,6 +128,14 @@ export const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
+              <hr className="border-white/10" />
+              <button 
+                onClick={() => { toggleLanguage(); setIsOpen(false); }}
+                className="flex items-center gap-4 text-lg font-semibold text-white hover:text-accent transition-colors w-full text-left"
+              >
+                <Globe className="w-5 h-5 text-accent" />
+                Change Language ({lang === 'EN' ? 'Arabic' : 'English'})
+              </button>
               <hr className="border-white/10" />
               {user ? (
                 <div className="flex flex-col gap-4">
