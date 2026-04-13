@@ -333,7 +333,9 @@ export default function NutritionPage() {
                            <Apple className="w-5 h-5 text-gray-600 group-hover:text-accent" />
                          </div>
                          <div>
-                          <p className="text-xl font-black group-hover:text-accent transition-colors">{food.name}</p>
+                          <p className="text-xl font-black group-hover:text-accent transition-colors">
+                            {food.name} {food.nameAr && <span className="text-sm font-normal text-gray-400">({food.nameAr})</span>}
+                          </p>
                           <p className="text-[10px] text-gray-500 uppercase font-black tracking-[0.2em]">{food.unit} • {food.calories} kcal</p>
                         </div>
                       </div>

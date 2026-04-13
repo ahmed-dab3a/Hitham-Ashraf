@@ -4,6 +4,7 @@
 export interface FoodData {
   id: string;
   name: string;
+  nameAr?: string;
   category: string;
   calories: number;
   protein: number;

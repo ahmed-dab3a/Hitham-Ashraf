@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { verifyToken, getAuthToken } from '@/lib/auth';
-import { FOODS, type FoodData } from '@/lib/food-data';
-
+import { FoodData } from '@/lib/food-data';
+import Food from '@/models/Food';
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get('q')?.toLowerCase() || '';
@@ -12,21 +12,38 @@ export async function GET(req: Request) {
 
   // Food search mode
   if (query) {
-    let results: FoodData[] = FOODS.filter(food =>
-      food.name.toLowerCase().includes(query)
-    );
-
-    if (category && category !== 'All') {
-      results = results.filter(food => food.category === category);
+    try {
+      await dbConnect();
+      const results = await Food.find({
+        $or: [
+          { name: { $regex: query, $options: 'i' } },
+          { nameAr: { $regex: query, $options: 'i' } }
+        ]
+      }).limit(50);
+      
+      const formattedResults = results.map(food => ({
+        ...food.toObject(),
+        id: food._id.toString()
+      }));
+      return NextResponse.json(formattedResults);
+    } catch (err: any) {
+      return NextResponse.json({ error: err.message }, { status: 500 });
     }
-
-    return NextResponse.json(results);
   }
 
   // Browse by category
   if (category && !date) {
-    const results = FOODS.filter(food => food.category === category);
-    return NextResponse.json(results);
+    try {
+      await dbConnect();
+      const results = await Food.find({ category }).limit(50);
+      const formattedResults = results.map(food => ({
+        ...food.toObject(),
+        id: food._id.toString()
+      }));
+      return NextResponse.json(formattedResults);
+    } catch (err: any) {
+      return NextResponse.json({ error: err.message }, { status: 500 });
+    }
   }
 
   // User daily log mode
@@ -49,7 +66,17 @@ export async function GET(req: Request) {
   }
 
   // Default: return all foods
-  return NextResponse.json(FOODS);
+  try {
+    await dbConnect();
+    const results = await Food.find({}).limit(50);
+    const formattedResults = results.map(food => ({
+      ...food.toObject(),
+      id: food._id.toString()
+    }));
+    return NextResponse.json(formattedResults);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {

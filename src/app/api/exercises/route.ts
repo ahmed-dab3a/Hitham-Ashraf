@@ -1,35 +1,43 @@
 import { NextResponse } from 'next/server';
-import { EXERCISES } from '@/lib/exercise-data';
+import dbConnect from '@/lib/mongodb';
+import Exercise from '@/models/Exercise';
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const muscle = searchParams.get('muscle');
-  const category = searchParams.get('category');
-  const equipment = searchParams.get('equipment');
-  const search = searchParams.get('search')?.toLowerCase();
+  try {
+    await dbConnect();
+    
+    const { searchParams } = new URL(req.url);
+    const muscle = searchParams.get('muscle');
+    const category = searchParams.get('category');
+    const equipment = searchParams.get('equipment');
+    const search = searchParams.get('search')?.toLowerCase();
 
-  let results = [...EXERCISES];
+    // Build query object
+    const query: any = {};
+    
+    if (muscle && muscle !== 'All') query.muscle = muscle;
+    if (category && category !== 'All') query.category = category;
+    if (equipment && equipment !== 'All') query.equipment = equipment;
 
-  if (muscle && muscle !== 'All') {
-    results = results.filter(ex => ex.muscle === muscle);
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { muscle: { $regex: search, $options: 'i' } },
+        { equipment: { $regex: search, $options: 'i' } },
+        { secondaryMuscles: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const results = await Exercise.find(query).limit(100);
+    
+    // Map _id to id for frontend compatibility
+    const formattedResults = results.map(ex => ({
+      ...ex.toObject(),
+      id: ex._id.toString()
+    }));
+
+    return NextResponse.json(formattedResults);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  if (category && category !== 'All') {
-    results = results.filter(ex => ex.category === category);
-  }
-
-  if (equipment && equipment !== 'All') {
-    results = results.filter(ex => ex.equipment === equipment);
-  }
-
-  if (search) {
-    results = results.filter(ex =>
-      ex.name.toLowerCase().includes(search) ||
-      ex.muscle.toLowerCase().includes(search) ||
-      ex.equipment.toLowerCase().includes(search) ||
-      ex.secondaryMuscles.some(m => m.toLowerCase().includes(search))
-    );
-  }
-
-  return NextResponse.json(results);
 }
