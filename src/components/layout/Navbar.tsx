@@ -36,6 +36,7 @@ export const Navbar = () => {
     { name: language === 'ar' ? 'التمارين' : 'Exercises', href: '/exercises', icon: Dumbbell },
     { name: language === 'ar' ? 'الخطط الرياضية' : 'Workouts', href: '/workouts', icon: Dumbbell },
     { name: language === 'ar' ? 'التغذية' : 'Nutrition', href: '/nutrition', icon: Utensils },
+    { name: language === 'ar' ? 'دليل السعرات' : 'Food Data', href: '/foods', icon: Utensils },
   ];
 
   return (
