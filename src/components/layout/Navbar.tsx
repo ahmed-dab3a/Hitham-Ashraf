@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, Dumbbell, Utensils, LayoutDashboard, LogOut, Globe } from 'lucide-react';
+import { Menu, X, User, Dumbbell, Utensils, LayoutDashboard, LogOut, Globe, Calculator } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui';
 
@@ -37,6 +37,7 @@ export const Navbar = () => {
     { name: language === 'ar' ? 'الخطط الرياضية' : 'Workouts', href: '/workouts', icon: Dumbbell },
     { name: language === 'ar' ? 'التغذية' : 'Nutrition', href: '/nutrition', icon: Utensils },
     { name: language === 'ar' ? 'دليل السعرات' : 'Food Data', href: '/foods', icon: Utensils },
+    { name: language === 'ar' ? 'حاسب الماكروز' : 'Calculator', href: '/calculator', icon: Calculator },
   ];
 
   return (
