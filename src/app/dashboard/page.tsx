@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
@@ -14,13 +14,27 @@ import {
   Zap,
   CreditCard,
   AlertCircle,
-  Activity
+  Activity,
+  History,
+  CheckCircle2
 } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
+  const [recentLogs, setRecentLogs] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetch(`/api/logs?userId=${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.logs) setRecentLogs(data.logs);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [user]);
   
   // Mock data for dashboard
   const stats = [
@@ -177,6 +191,55 @@ export default function DashboardPage() {
               </Button>
             </Link>
           </Card>
+        </div>
+
+        {/* Recent Workout Progress (Logs) */}
+        <div className="mt-8">
+           <Card className="flex flex-col border border-[#2c2c2e]">
+              <div className="flex items-center gap-3 mb-8">
+                 <div className="p-3 bg-accent text-black rounded-xl">
+                   <History className="w-6 h-6" />
+                 </div>
+                 <h3 className="text-2xl font-display font-black uppercase">Recent Progress <span className="text-gray-500 text-base ml-2" dir="rtl">التطور الأخير</span></h3>
+              </div>
+              
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 no-scrollbar">
+                 {recentLogs.length > 0 ? (
+                   recentLogs.map((log) => (
+                     <div key={log._id} className="bg-[#1c1c1e] p-6 rounded-3xl border border-[#2c2c2e] flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:bg-[#2c2c2e] transition-colors">
+                        <div>
+                           <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-1">
+                             {new Date(log.createdAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                           </p>
+                           <h4 className="text-xl font-black text-white">{log.exerciseName}</h4>
+                        </div>
+                        <div className="flex items-center gap-6">
+                           <div className="text-center">
+                             <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Sets</p>
+                             <p className="text-lg font-black text-white">{log.sets}</p>
+                           </div>
+                           <div className="text-center">
+                             <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Reps</p>
+                             <p className="text-lg font-black text-white">{log.reps}</p>
+                           </div>
+                           <div className="text-center bg-accent/10 px-6 py-2 rounded-xl border border-accent/20">
+                             <p className="text-[10px] text-accent font-black uppercase tracking-widest">Weight</p>
+                             <p className="text-xl font-black text-accent">{log.weightKg} kg</p>
+                           </div>
+                        </div>
+                     </div>
+                   ))
+                 ) : (
+                   <div className="text-center py-12 border-2 border-dashed border-[#2c2c2e] rounded-3xl bg-[#1c1c1e]">
+                      <Dumbbell className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                      <p className="text-gray-400 font-bold uppercase tracking-widest">No exercises logged yet.</p>
+                      <Link href="/exercises">
+                         <Button variant="outline" className="mt-4">Go to Exercises <span className="ml-2" dir="rtl">ابدأ السجل</span></Button>
+                      </Link>
+                   </div>
+                 )}
+              </div>
+           </Card>
         </div>
 
         {/* Subscription Quick Link (Simplified) */}

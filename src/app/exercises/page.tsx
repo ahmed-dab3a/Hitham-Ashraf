@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Info, PlayCircle, Target, Zap, Activity, X } from 'lucide-react';
+import { Search, Info, PlayCircle, Target, Zap, Activity, X, Dumbbell, Save, CheckCircle2 } from 'lucide-react';
 import { Card, Button } from '@/components/ui';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface Exercise {
   id: string;
@@ -250,6 +251,9 @@ export default function ExercisesPage() {
                    </p>
                 </div>
 
+                {/* Workout Logger Widget */}
+                <WorkoutLogger exercise={selectedExercise} />
+
                 {/* Instructions */}
                 <div>
                   <h4 className="text-white font-black uppercase tracking-widest text-xs flex items-center gap-2 mb-6 border-b border-[#2c2c2e] pb-4">
@@ -273,6 +277,101 @@ export default function ExercisesPage() {
           </div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function WorkoutLogger({ exercise }: { exercise: Exercise }) {
+  const { user } = useAuthStore();
+  const [sets, setSets] = useState(3);
+  const [reps, setReps] = useState(10);
+  const [weightKg, setWeightKg] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleSave = async () => {
+    if (!user) {
+      alert("يجب تسجيل الدخول أولاً لحفظ تطورك");
+      return;
+    }
+    
+    setLoading(true);
+    setSuccess(false);
+    
+    try {
+      const res = await fetch('/api/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          exerciseId: exercise.id,
+          exerciseName: exercise.name,
+          sets,
+          reps,
+          weightKg,
+        })
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      } else {
+        alert("فشل الحفظ، حاول مرة أخرى");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="mb-10 bg-[#0a0a0a] border border-[#2c2c2e] rounded-[24px] p-6 lg:p-8 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
+      
+      <div className="flex items-center gap-3 mb-6" dir="rtl">
+        <div className="p-2.5 bg-[#1c1c1e] text-accent rounded-xl border border-[#2c2c2e]">
+          <Dumbbell className="w-5 h-5" />
+        </div>
+        <h4 className="text-lg font-black text-white">تسجيل الأوزان والتطور</h4>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 md:gap-6 mb-6 text-center">
+        {/* Sets */}
+        <div className="bg-[#1c1c1e] border border-[#2c2c2e] rounded-2xl p-4 flex flex-col items-center">
+          <label className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-2">Sets الدفعات</label>
+          <input 
+            type="number" min="1" value={sets} onChange={(e) => setSets(Number(e.target.value))}
+            className="w-full bg-transparent text-2xl font-black text-white text-center focus:outline-none"
+          />
+        </div>
+
+        {/* Reps */}
+        <div className="bg-[#1c1c1e] border border-[#2c2c2e] rounded-2xl p-4 flex flex-col items-center">
+          <label className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-2">Reps عدات</label>
+          <input 
+            type="number" min="1" value={reps} onChange={(e) => setReps(Number(e.target.value))}
+            className="w-full bg-transparent text-2xl font-black text-white text-center focus:outline-none"
+          />
+        </div>
+
+        {/* Weight */}
+        <div className="bg-[#1c1c1e] border border-[#2c2c2e] rounded-2xl p-4 flex flex-col items-center">
+          <label className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-2">Weight (KG)</label>
+          <input 
+            type="number" min="0" step="2.5" value={weightKg} onChange={(e) => setWeightKg(Number(e.target.value))}
+            className="w-full bg-transparent text-2xl font-black text-white text-center focus:outline-none text-accent"
+          />
+        </div>
+      </div>
+
+      <Button 
+        onClick={handleSave} 
+        disabled={loading || success}
+        className={`w-full py-4 text-sm font-black uppercase tracking-widest flex items-center justify-center gap-2 ${success ? 'bg-green-500 hover:bg-green-600 text-white' : ''}`}
+      >
+        {loading ? 'جاري الحفظ...' : success ? <><CheckCircle2 className="w-5 h-5" /> تم الحفظ بنجاح</> : <><Save className="w-5 h-5" /> حفظ التمرين</>}
+      </Button>
     </div>
   );
 }
