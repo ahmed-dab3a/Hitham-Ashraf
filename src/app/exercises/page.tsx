@@ -208,6 +208,10 @@ export default function ExercisesPage() {
                   src={selectedExercise.gifUrl} 
                   alt={selectedExercise.name} 
                   className="w-full h-full object-contain filter mix-blend-screen opacity-90"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500&q=80';
+                    e.currentTarget.className = "w-full h-full object-cover opacity-30 grayscale";
+                  }}
                 />
                 
                 <button 
