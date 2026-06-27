@@ -48,7 +48,8 @@ const UserSchema = new mongoose.Schema({
       exerciseId: String,
       name: String,
       targetSets: { type: Number, default: 3 },
-      targetReps: { type: String, default: '8-12' }
+      targetReps: { type: String, default: '8-12' },
+      targetWeight: { type: Number, default: 0 }
     }]
   }],
   nutrition: [{

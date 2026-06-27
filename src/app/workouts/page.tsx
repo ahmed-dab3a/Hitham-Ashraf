@@ -23,6 +23,7 @@ interface WorkoutPlan {
     name: string;
     targetSets: number;
     targetReps: string;
+    targetWeight?: number;
   }[];
 }
 
@@ -111,7 +112,7 @@ export default function WorkoutsPage() {
     if (newPlan.exercises.find(e => e.exerciseId === ex.id)) return;
     setNewPlan({
       ...newPlan,
-      exercises: [...newPlan.exercises, { exerciseId: ex.id, name: ex.name, targetSets: 3, targetReps: '8-12' }]
+      exercises: [...newPlan.exercises, { exerciseId: ex.id, name: ex.name, targetSets: 3, targetReps: '8-12', targetWeight: 0 }]
     });
     setSearchQuery('');
   };
@@ -245,6 +246,20 @@ export default function WorkoutsPage() {
                                     }}
                                    />
                                    <span className="text-[10px] font-black uppercase text-gray-700">Reps</span>
+
+                                   <input 
+                                    type="number" 
+                                    className="bg-transparent text-[10px] font-black uppercase text-accent w-10 focus:outline-none"
+                                    value={ex.targetWeight || 0}
+                                    onChange={(e) => {
+                                      const val = parseInt(e.target.value) || 0;
+                                      const updated = [...newPlan.exercises];
+                                      const idx = updated.findIndex(u => u.exerciseId === ex.exerciseId);
+                                      updated[idx].targetWeight = val;
+                                      setNewPlan({ ...newPlan, exercises: updated });
+                                    }}
+                                   />
+                                   <span className="text-[10px] font-black uppercase text-gray-700">KG</span>
                                 </div>
                               </div>
                             </div>
@@ -341,9 +356,9 @@ export default function WorkoutsPage() {
                     {plan.exercises.map((ex, idx) => (
                       <div key={idx} className="flex items-center gap-4 group/item">
                          <div className="w-1.5 h-1.5 rounded-full bg-accent opacity-30 group-item/item:opacity-100 transition-opacity" />
-                         <div>
+                          <div>
                             <p className="font-bold text-gray-300 text-sm">{ex.name}</p>
-                            <p className="text-[10px] font-black uppercase text-gray-600 tracking-widest">{ex.targetSets} sets • {ex.targetReps} reps</p>
+                            <p className="text-[10px] font-black uppercase text-gray-600 tracking-widest">{ex.targetSets} sets • {ex.targetReps} reps {ex.targetWeight ? `• ${ex.targetWeight} kg` : ''}</p>
                          </div>
                       </div>
                     ))}
