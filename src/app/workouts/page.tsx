@@ -211,15 +211,15 @@ export default function WorkoutsPage() {
                           <motion.div 
                             layoutId={ex.exerciseId}
                             key={ex.exerciseId} 
-                            className="flex items-center justify-between p-6 bg-white/[0.03] rounded-[32px] border border-white/10 group hover:border-accent/40 transition-all shadow-inner"
+                            className="flex items-start sm:items-center justify-between p-4 sm:p-6 bg-white/[0.03] rounded-[32px] border border-white/10 group hover:border-accent/40 transition-all shadow-inner"
                           >
-                            <div className="flex items-center gap-5">
-                              <div className="p-3 bg-white/5 rounded-2xl text-gray-600 group-hover:text-accent transition-colors">
+                            <div className="flex items-start sm:items-center gap-3 sm:gap-5 flex-1 min-w-0">
+                              <div className="p-2 sm:p-3 mt-1 sm:mt-0 bg-white/5 rounded-2xl text-gray-600 group-hover:text-accent transition-colors shrink-0">
                                 <GripVertical className="w-4 h-4" />
                               </div>
-                              <div>
-                                <p className="font-black text-lg group-hover:text-accent transition-colors">{ex.name}</p>
-                                <div className="flex gap-4 mt-1">
+                              <div className="min-w-0 flex-1">
+                                <p className="font-black text-base sm:text-lg group-hover:text-accent transition-colors truncate">{ex.name}</p>
+                                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-1.5">
                                    <input 
                                     type="number" 
                                     className="bg-transparent text-[10px] font-black uppercase text-accent w-8 focus:outline-none"
@@ -235,7 +235,7 @@ export default function WorkoutsPage() {
                                    <span className="text-[10px] font-black uppercase text-gray-700">Sets</span>
                                    <input 
                                     type="text" 
-                                    className="bg-transparent text-[10px] font-black uppercase text-accent w-12 focus:outline-none"
+                                    className="bg-transparent text-[10px] font-black uppercase text-accent w-10 sm:w-12 focus:outline-none"
                                     value={ex.targetReps}
                                     onChange={(e) => {
                                       const val = e.target.value;
